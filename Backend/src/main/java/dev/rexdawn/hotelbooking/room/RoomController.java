@@ -18,7 +18,7 @@ public class RoomController {
     {
         return new ResponseEntity<List<Room>>(roomService.getAllRooms(), HttpStatus.OK);
     }
-    @PostMapping("/addroom")
+    @PostMapping("/add")
     public ResponseEntity<String> addRoom(@RequestBody Room room)
     {
         roomService.addNewRoom(room);
