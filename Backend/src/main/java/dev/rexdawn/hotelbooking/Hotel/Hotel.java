@@ -22,6 +22,7 @@ public class Hotel {
     private String address;
     private String city;
     private String desc;
+    private String imageUrl;
 
     @DocumentReference // manual reference relationship
     private List<Room>rooms;
@@ -65,4 +66,5 @@ public class Hotel {
     public void setRooms(List<Room> rooms) {
         this.rooms = rooms;
     }
+
 }

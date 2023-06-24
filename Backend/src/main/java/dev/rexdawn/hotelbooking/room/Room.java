@@ -19,6 +19,7 @@ public class Room {
     @Id
     private ObjectId id;
     private String roomId;
+    private String title;
     private int price;
     private int maxPeople;
     private String desc;

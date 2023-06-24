@@ -18,7 +18,7 @@ public class UserController {
     {
         return new ResponseEntity<List<User>>(userService.getAllUsers(), HttpStatus.OK);
     }
-    @PostMapping("/adduser")
+    @PostMapping("/add")
     public ResponseEntity<String> addUser(@RequestBody User user)
     {
         userService.addNewUser(user);
