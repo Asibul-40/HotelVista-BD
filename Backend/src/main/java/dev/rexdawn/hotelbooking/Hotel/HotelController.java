@@ -1,5 +1,6 @@
 package dev.rexdawn.hotelbooking.Hotel;
 
+import dev.rexdawn.hotelbooking.room.Room;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
