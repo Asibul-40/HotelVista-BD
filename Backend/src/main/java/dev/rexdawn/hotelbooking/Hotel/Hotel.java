@@ -13,11 +13,12 @@ import java.util.List;
 
 @Document(collection="hotels")
 @Data // extension of Lombok. works for All getter/setter/toString methods for private property.
-@AllArgsConstructor // Sobgula private var arguments hisebe niye then constructor call kore
+@AllArgsConstructor // All private var arguments will be associated for constructor call.
 @NoArgsConstructor
 public class Hotel {
     @Id
     private ObjectId id;
+    private String hotelId;
     private String name;
     private String address;
     private String city;
@@ -26,6 +27,8 @@ public class Hotel {
 
     @DocumentReference // manual reference relationship
     private List<Room>rooms;
+
+    private List<Object> reviews;
 
     public String getName() {
         return name;
