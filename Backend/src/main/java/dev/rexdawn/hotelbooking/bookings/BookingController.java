@@ -33,8 +33,9 @@ public class BookingController {
         bookingService.addNewBooking(booking);
         return ResponseEntity.ok("New Booking Added Successfully!");
     }
-    @GetMapping("/search/{date}")
+    @GetMapping("/search/{city}/{date}")
     public ResponseEntity<List<Room>> findAvailableRooms(
+            @PathVariable String city,
             @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date)
     {
         List<ObjectId> allRoomId=bookingService.findAvailableRoomsOnCheckInDate(date);
