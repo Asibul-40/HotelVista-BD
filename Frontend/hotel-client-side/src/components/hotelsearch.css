@@ -1,0 +1,43 @@
+.hotel-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .hotel-card {
+    margin: 10px; 
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    width: 400px; 
+  height: 150px;
+  }
+  .hotel-info {
+    flex-grow: 1;
+  }
+  .hotel-info p {
+    margin: 0; /* Reset the default margin for paragraphs */
+  }
+  
+  .hotel-image {
+    width:180px;
+    height: 170px;
+    object-fit: contain;
+    border-radius: 2px;
+    margin-right: 3px;
+  }
+  
+  .hotel-name {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .room-title {
+    font-weight: bold;
+  }
+
+  
+  /* Add more custom styles as needed */
+  
