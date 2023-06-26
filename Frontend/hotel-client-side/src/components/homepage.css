@@ -1,5 +1,6 @@
-#hotelslist{
+.hotelslist{
     width: 70%;
     height: 50%;
     display: flex;
   }
+  

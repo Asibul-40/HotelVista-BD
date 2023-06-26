@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/rooms")
+@CrossOrigin(origins = "http://localhost:3000")
 public class RoomController {
     @Autowired
     private RoomService roomService;

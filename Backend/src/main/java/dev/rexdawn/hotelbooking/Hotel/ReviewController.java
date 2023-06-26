@@ -9,6 +9,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/hotels/reviews")
+@CrossOrigin(origins = "http://localhost:3000")
 public class ReviewController {
     @Autowired
     private ReviewService reviewService;

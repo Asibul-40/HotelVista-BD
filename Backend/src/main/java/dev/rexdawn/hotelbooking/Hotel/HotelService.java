@@ -1,5 +1,7 @@
 package dev.rexdawn.hotelbooking.Hotel;
 
+import dev.rexdawn.hotelbooking.bookings.Booking;
+import dev.rexdawn.hotelbooking.bookings.BookingService;
 import dev.rexdawn.hotelbooking.room.Room;
 import dev.rexdawn.hotelbooking.room.RoomRepository;
 import org.bson.types.ObjectId;
@@ -12,13 +14,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.client.ResourceAccessException;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 // Service class er vitr e ekta repository er refernce lagbe
 @Service // Database access methods are written inside this class
 public class HotelService {
+    @Autowired
+    private BookingService bookingService;
     @Autowired
     private RoomRepository roomRepository;
     @Autowired
@@ -36,19 +42,33 @@ public class HotelService {
     public Optional<Hotel> singleHotel(ObjectId id){
         return hotelRepository.findById(id);
     }
-    public Optional<List<Hotel>>getSameAddressHotels(String address){
-        return hotelRepository.findByAddress(address);
+    public Optional<List<Hotel>>getSameCityHotels(String city){
+//        System.out.println(city);
+        return hotelRepository.findByCity(city);
     }
     public Hotel updateHotel(ObjectId id, Hotel updatedHotel) {
         Optional<Hotel> srchedHotel = hotelRepository.findById(id);
 
         if(srchedHotel.isPresent()) {
             Hotel hotel = srchedHotel.get();
-            hotel.setName(updatedHotel.getName());
-            hotel.setCity(updatedHotel.getCity());
-            hotel.setDesc(updatedHotel.getDesc());
-            hotel.setAddress(updatedHotel.getAddress());
-            hotel.setRooms(updatedHotel.getRooms());
+            if(updatedHotel.getName()!=null) {
+                hotel.setName(updatedHotel.getName());
+            }
+            if(updatedHotel.getCity()!=null) {
+                hotel.setCity(updatedHotel.getCity());
+            }
+            if(updatedHotel.getDesc()!=null) {
+                hotel.setDesc(updatedHotel.getDesc());
+            }
+            if(updatedHotel.getAddress()!=null) {
+                hotel.setAddress(updatedHotel.getAddress());
+            }
+            if(updatedHotel.getRooms()!=null) {
+                hotel.setRooms(updatedHotel.getRooms());
+            }
+            if(updatedHotel.getImageUrl()!=null) {
+                hotel.setImageUrl(updatedHotel.getImageUrl());
+            }
             hotelRepository.save(hotel);
             return hotel;
         }
@@ -96,7 +116,7 @@ public class HotelService {
                     if(modifiedroom.getMaxPeople()!=null){
                         room.setMaxPeople(modifiedroom.getMaxPeople());
                     }
-                    if(modifiedroom.getTitle()!=null){
+                    if(modifiedroom.getTitle()!=null) {
                         room.setTitle(modifiedroom.getTitle());
                     }
                     roomRepository.save(room);
@@ -127,6 +147,24 @@ public class HotelService {
         else{
             return "Hotel Not found with this HotelId="+hotelId;
         }
+    }
+
+    //Extract All Rooms of a Hotel by Id
+    public List<Room> getRoomList(String hotelId, Date checkInDate)
+    {
+       Optional<Hotel> hotel=hotelRepository.findById(hotelId);
+       List<Room> rooms= hotel.get().getRooms();
+       List<Booking> bookings=bookingService.allBookings();
+        List<ObjectId> unavailableRoomIds = bookings.stream()
+                .filter(booking -> checkInDate.after(booking.getCheckInDate()) && checkInDate.before(booking.getCheckOutDate()))
+                .map(Booking::getRoomId)
+                .collect(Collectors.toList());
+
+        List<Room> availableRooms = rooms.stream()
+                .filter(room -> !unavailableRoomIds.contains(room.getId()))
+                .collect(Collectors.toList());
+
+        return availableRooms;
     }
 
 }

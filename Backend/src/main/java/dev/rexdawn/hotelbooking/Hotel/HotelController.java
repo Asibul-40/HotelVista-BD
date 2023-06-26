@@ -1,40 +1,79 @@
 package dev.rexdawn.hotelbooking.Hotel;
 
+import dev.rexdawn.hotelbooking.bookings.BookingService;
 import dev.rexdawn.hotelbooking.room.Room;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/hotels")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class HotelController {
     @Autowired
     private HotelService hotelService;
+    @Autowired
+    private BookingService bookingService;
 
 //    ------------------------------------- HOTEL MODULE --------------------------------------------------
 
     @GetMapping
-    // GET ALL HOTELS
-    public ResponseEntity<List<Hotel>> GetAllHotel(){
-        return new ResponseEntity<List<Hotel>>(hotelService.allHotel(), HttpStatus.OK);
+    public ResponseEntity<List<Hotel>> GetHotels(@RequestParam(name = "city", required=false) String city) {
+            // Get all hotels
+            if(city!=null)
+            {
+                Optional<List<Hotel>> hotelsByCity = hotelService.getSameCityHotels(city);
+                if (hotelsByCity.isPresent()) {
+                    return new ResponseEntity<>(hotelsByCity.get(), HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                }
+            }
+            else {
+                List<Hotel> allHotels = hotelService.allHotel();
+                return new ResponseEntity<>(allHotels, HttpStatus.OK);
+            }
     }
+    @GetMapping("/query")
+    public ResponseEntity<List<Room>> getRoomsFromHotel(
+            @RequestParam String hotelId, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date)
+    {
+          //Extract All rooms by hotel Id
+//        System.out.println(hotelId+" I am here!");
+         List<Room> roomList=hotelService.getRoomList(hotelId,date);
+         return new ResponseEntity<>(roomList,HttpStatus.OK);
+    }
+//    @GetMapping("/cityquery/{city}")
+//    public ResponseEntity<List<Hotel>> GetHotelsByCity(
+//            @PathVariable String city) {
+//        // Get hotels by city
+//        Optional<List<Hotel>> hotelsByCity = hotelService.getSameCityHotels(city);
+//        if (hotelsByCity.isPresent()) {
+//            return new ResponseEntity<>(hotelsByCity.get(), HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
+
     @GetMapping("/{id}")
     // GET SINGLE HOTEL BY ID
     public ResponseEntity<Optional<Hotel>> GetSingleHotel(@PathVariable ObjectId id) {
         return new ResponseEntity<Optional<Hotel>>(hotelService.singleHotel(id), HttpStatus.OK);
     }
-    @GetMapping("/loc/{address}")
-    // GET ALL HOTELS BY ADDRESS
-    public ResponseEntity<Optional<List<Hotel>>> GetSameAddressHotels(@PathVariable String address) {
-        return new ResponseEntity<Optional<List<Hotel>>>(hotelService.getSameAddressHotels(address), HttpStatus.OK);
-    }
+//    @GetMapping
+//    // GET ALL HOTELS BY ADDRESS
+//    public ResponseEntity<Optional<List<Hotel>>> GetSameAddressHotels(@RequestParam("city") String city) {
+//        System.out.println("HELLOOOOOOOOOOO");
+//        return new ResponseEntity<Optional<List<Hotel>>>(hotelService.getSameCityHotels(city), HttpStatus.OK);
+//    }
     @PostMapping("/add")
     // ADD NEW HOTEL
     public Hotel AddNewHotel(@RequestBody Hotel newHotel){
