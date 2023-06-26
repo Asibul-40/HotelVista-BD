@@ -18,18 +18,14 @@ import org.springframework.stereotype.Repository;
 public class Room {
     @Id
     private ObjectId id;
-    private String roomId;
+    private String hotelId;
     private String title;
     private Number price;
     private Number maxPeople;
     private String desc;
 
-    public String getRoomId() {
-        return roomId;
-    }
-
-    public void setRoomId(String roomId) {
-        this.roomId = roomId;
+    public String gethotelId() {
+        return hotelId;
     }
 
     public String getTitle() {

@@ -96,8 +96,8 @@ public class HotelService {
                     if(modifiedroom.getMaxPeople()!=null){
                         room.setMaxPeople(modifiedroom.getMaxPeople());
                     }
-                    if(modifiedroom.getType()!=null){
-                        room.setType(modifiedroom.getType());
+                    if(modifiedroom.getTitle()!=null){
+                        room.setTitle(modifiedroom.getTitle());
                     }
                     roomRepository.save(room);
                     hotel.setRooms(rooms);

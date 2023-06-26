@@ -18,7 +18,6 @@ import java.util.List;
 public class Hotel {
     @Id
     private ObjectId id;
-    private String hotelId;
     private String name;
     private String address;
     private String city;

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/bookings")
@@ -37,8 +38,8 @@ public class BookingController {
     public ResponseEntity<List<Room>> findAvailableRooms(
             @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date)
     {
-        List<ObjectId> allRoomId=bookingService.findAvailableRoomsOnCheckInDate(date);
+        List<ObjectId> allAvailableRoomId = bookingService.findAvailableRoomsOnCheckInDate(date);
 
-        return new ResponseEntity<List<Room>>(roomService.getAllAvailableRooms(allRoomId),HttpStatus.OK);
+        return ResponseEntity.ok(roomService.getAllAvailableRooms(allAvailableRoomId));
     }
 }
