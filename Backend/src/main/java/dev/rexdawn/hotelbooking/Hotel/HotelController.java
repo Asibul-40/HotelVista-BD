@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -25,9 +25,14 @@ public class HotelController {
 
 //    ------------------------------------- HOTEL MODULE --------------------------------------------------
 
+    @GetMapping("/all")
+    public ResponseEntity<List<Hotel>> GetAllHotels(){
+        return ResponseEntity.ok(hotelService.allHotel());
+    }
+
     @GetMapping
     public ResponseEntity<List<Hotel>> GetHotels(@RequestParam(name = "city", required=false) String city) {
-            // Get all hotels
+            // Get all hotels by City
             if(city!=null)
             {
                 Optional<List<Hotel>> hotelsByCity = hotelService.getSameCityHotels(city);
@@ -51,42 +56,28 @@ public class HotelController {
          List<Room> roomList=hotelService.getRoomList(hotelId,date);
          return new ResponseEntity<>(roomList,HttpStatus.OK);
     }
-//    @GetMapping("/cityquery/{city}")
-//    public ResponseEntity<List<Hotel>> GetHotelsByCity(
-//            @PathVariable String city) {
-//        // Get hotels by city
-//        Optional<List<Hotel>> hotelsByCity = hotelService.getSameCityHotels(city);
-//        if (hotelsByCity.isPresent()) {
-//            return new ResponseEntity<>(hotelsByCity.get(), HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_USER') or hasAuthority('ROLE_ADMIN')")
     // GET SINGLE HOTEL BY ID
-    public ResponseEntity<Optional<Hotel>> GetSingleHotel(@PathVariable ObjectId id) {
+    public ResponseEntity<Optional<Hotel>> GetSingleHotel(@PathVariable String id) {
         return new ResponseEntity<Optional<Hotel>>(hotelService.singleHotel(id), HttpStatus.OK);
     }
-//    @GetMapping
-//    // GET ALL HOTELS BY ADDRESS
-//    public ResponseEntity<Optional<List<Hotel>>> GetSameAddressHotels(@RequestParam("city") String city) {
-//        System.out.println("HELLOOOOOOOOOOO");
-//        return new ResponseEntity<Optional<List<Hotel>>>(hotelService.getSameCityHotels(city), HttpStatus.OK);
-//    }
+
     @PostMapping("/add")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     // ADD NEW HOTEL
     public Hotel AddNewHotel(@RequestBody Hotel newHotel){
         return hotelService.newHotel(newHotel);
     }
     @PutMapping("/up/{id}")
     // UPDATE ANY HOTEL BY ID
-    public ResponseEntity<Hotel> UpdateHotel(@PathVariable ObjectId id, @RequestBody Hotel updatedHotel){
+    public ResponseEntity<Hotel> UpdateHotel(@PathVariable String id, @RequestBody Hotel updatedHotel){
         return new ResponseEntity<Hotel>(hotelService.updateHotel(id, updatedHotel), HttpStatus.OK);
     }
     @DeleteMapping("/delete/{id}")
     // DELETE ANY HOTEL BY ID
-    public void DeleteHotel(@PathVariable("id") ObjectId id){
+    public void DeleteHotel(@PathVariable("id") String id){
         hotelService.deleteHotel(id);
     }
 //--------------------------------------------------------------------------------------------------------
@@ -97,17 +88,17 @@ public class HotelController {
 
     @PostMapping("/addroom/{id}")
     // ADD NEW ROOM INSIDE ANY HOTEL, associated with unique HOTEL ID
-    public ResponseEntity<String> AddHotelRoom(@RequestBody Room room, @PathVariable ObjectId id){
+    public ResponseEntity<String> AddHotelRoom(@RequestBody Room room, @PathVariable String id){
         return new ResponseEntity<String>(hotelService.addHotelRoom(room, id), HttpStatus.OK);
     }
     @PutMapping("/updateroom/{id}")
     // UPDATE ANY ROOM INSIDE ANY HOTEL, associated with unique HotelID, unique roomID
-    public ResponseEntity<String>UpdateHotelRoom(@PathVariable ObjectId id, @RequestParam("roomId") String roomId, @RequestBody Room room){
+    public ResponseEntity<String>UpdateHotelRoom(@PathVariable String id, @RequestParam("roomId") ObjectId roomId, @RequestBody Room room){
         return new ResponseEntity<String>(hotelService.updateHotelRoom(id, roomId, room), HttpStatus.OK);
     }
     @DeleteMapping("/deleteroom/{id}")
     // DELETE ROOM INSIDE ANY HOTEL, associated with unique HotelID, unique roomID
-    public ResponseEntity<String> DeleteHotelRoom(@PathVariable ObjectId id, @RequestParam("roomId") String roomId){
+    public ResponseEntity<String> DeleteHotelRoom(@PathVariable String id, @RequestParam("roomId") ObjectId roomId){
         return new ResponseEntity<String>(hotelService.deleteHotelRoom(id, roomId), HttpStatus.OK);
     }
 

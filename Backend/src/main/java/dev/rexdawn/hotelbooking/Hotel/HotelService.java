@@ -8,15 +8,12 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.client.ResourceAccessException;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -39,14 +36,14 @@ public class HotelService {
         return hotelRepository.save(hotel);
     }
 
-    public Optional<Hotel> singleHotel(ObjectId id){
+    public Optional<Hotel> singleHotel(String id){
         return hotelRepository.findById(id);
     }
     public Optional<List<Hotel>>getSameCityHotels(String city){
 //        System.out.println(city);
         return hotelRepository.findByCity(city);
     }
-    public Hotel updateHotel(ObjectId id, Hotel updatedHotel) {
+    public Hotel updateHotel(String id, Hotel updatedHotel) {
         Optional<Hotel> srchedHotel = hotelRepository.findById(id);
 
         if(srchedHotel.isPresent()) {
@@ -76,7 +73,7 @@ public class HotelService {
             throw new ResourceAccessException("Can't update hotel by this id: "+ id);
         }
     }
-    public void deleteHotel(ObjectId id){
+    public void deleteHotel(String id){
         Optional<Hotel>searchedHotel = hotelRepository.findById(id);
         System.out.println(searchedHotel);
         if(searchedHotel.isPresent()) {
@@ -90,7 +87,7 @@ public class HotelService {
 
 
 //    ----------------------------------- ROOM MODULE -------------------------------------------------
-    public String addHotelRoom(Room room, ObjectId id){
+    public String addHotelRoom(Room room, String id){
         Room newRoom = roomRepository.insert(room);
         mongoTemplate.update(Hotel.class)
                 .matching(Criteria.where("id").is(id))
@@ -98,15 +95,15 @@ public class HotelService {
                 .first();
         return "Room Added...!";
     }
-    public String updateHotelRoom(ObjectId hotelId, String roomId, Room modifiedroom){
+    public String updateHotelRoom(String hotelId, ObjectId roomId, Room modifiedroom){
 
         Optional<Hotel> searchedHotel = hotelRepository.findById(hotelId);
         if (searchedHotel.isPresent()) {
             Hotel hotel = searchedHotel.get();
             List<Room> rooms = hotel.getRooms();
             for (Room room : rooms) {
-                System.out.println(room.getRoomId()+" "+roomId);
-                if (room.getRoomId().equals(roomId)) {
+                System.out.println(room.getId()+" "+roomId);
+                if (room.getId().equals(roomId)) {
                     if(modifiedroom.getPrice()!=null){
                         room.setPrice(modifiedroom.getPrice());
                     }
@@ -129,14 +126,14 @@ public class HotelService {
         }
         return "RoomID= "+roomId+ ", is Updated for HotelID= "+hotelId;
     }
-    public String deleteHotelRoom(ObjectId hotelId, String roomId){
+    public String deleteHotelRoom(String hotelId, ObjectId roomId){
         Optional<Hotel>searchedHotel = hotelRepository.findById(hotelId);
         if(searchedHotel.isPresent()){
             Hotel hotel = searchedHotel.get();
             List<Room>rooms = hotel.getRooms();
             for(Room room:rooms){
-                if(room.getRoomId().equals(roomId)) {
-                    roomRepository.deleteByroomId(roomId);
+                if(room.getId().equals(roomId)) {
+                    roomRepository.deleteById(roomId);
                     break;
                 }
             }

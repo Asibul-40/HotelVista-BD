@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RoomRepository extends MongoRepository<Room, String> {
-    Room findByroomId(String roomId);
-    void deleteByroomId(String roomId);
+    Room findById(ObjectId Id);
+    void deleteById(ObjectId Id);
 }

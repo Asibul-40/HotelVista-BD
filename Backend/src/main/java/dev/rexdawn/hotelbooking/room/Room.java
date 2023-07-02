@@ -24,6 +24,10 @@ public class Room {
     private Number maxPeople;
     private String desc;
 
+    public ObjectId getId() {
+        return id;
+    }
+
     public String gethotelId() {
         return hotelId;
     }
