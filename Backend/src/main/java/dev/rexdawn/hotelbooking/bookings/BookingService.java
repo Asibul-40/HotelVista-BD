@@ -23,15 +23,18 @@ public class BookingService {
     public void addNewBooking(Booking booking) {
         bookingRepository.save(booking);
     }
-    public List<ObjectId> findAvailableRoomsOnCheckInDate(Date checkInDate) {
+    public List<String> findAvailableRoomsOnDate(Date checkInDate,Date checkOutDate) {
         List<Booking> bookings = bookingRepository.findAll();
         List<Room> rooms=roomRepository.findAll();
-        List<ObjectId> unavailableRoomIds = bookings.stream()
-                .filter(booking -> checkInDate.after(booking.getCheckInDate()) && checkInDate.before(booking.getCheckOutDate()))
+        List<String> unavailableRoomIds = bookings.stream()
+                .filter(booking -> (checkInDate.after(booking.getCheckInDate()) && checkInDate.before(booking.getCheckOutDate()))
+                        ||(checkOutDate.after(booking.getCheckInDate()) && checkOutDate.before(booking.getCheckOutDate()))
+                        ||(booking.getCheckInDate().after(checkInDate) && booking.getCheckInDate().before(checkOutDate))
+                        ||(booking.getCheckOutDate().after(checkInDate) && booking.getCheckOutDate().before(checkOutDate)))
                 .map(Booking::getRoomId)
                 .collect(Collectors.toList());
 
-        List<ObjectId> allRoomIds = rooms.stream()
+        List<String> allRoomIds = rooms.stream()
                 .map(Room::getId)
                 .distinct()
                 .collect(Collectors.toList());

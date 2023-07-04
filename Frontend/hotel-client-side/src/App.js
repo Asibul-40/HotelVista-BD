@@ -15,7 +15,7 @@ function App() {
           <Route path="/allHotel" element={ <AllHotels/> } />
           <Route path='/login' element={<Login/>} />
           <Route path='/register' element={<Register/>} />
-          <Route path="/search-results/:city/:date" element={<SearchResultsPage/>} />
+          <Route path="/search-results/:city/:checkInDate/:checkOutDate" element={<SearchResultsPage/>} />
         </Routes>
     </div>
     </Router>

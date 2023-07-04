@@ -17,19 +17,19 @@ import org.springframework.stereotype.Repository;
 @NoArgsConstructor
 public class Room {
     @Id
-    private ObjectId id;
-    private String hotelId;
+    private String id;
+    private String roomId;
     private String title;
     private Number price;
     private Number maxPeople;
     private String desc;
 
-    public ObjectId getId() {
-        return id;
+    public String getRoomId() {
+        return roomId;
     }
 
-    public String gethotelId() {
-        return hotelId;
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
     }
 
     public String getTitle() {
