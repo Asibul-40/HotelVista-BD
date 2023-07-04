@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './css/hotelsearch.css';
+import 'bootstrap/dist/css/bootstrap.css';
+
 
 const SearchResultsPage = () => {
   const { checkInDate, city, checkOutDate } = useParams();
@@ -14,6 +16,7 @@ const SearchResultsPage = () => {
   const openModal = (room) => {
     setSelectedRoom(room);
     setIsModalOpen(true);
+  //  console.log("Its Here! -> " + isModalOpen);
   };
 
   // Function to handle closing the modal
@@ -26,9 +29,9 @@ const SearchResultsPage = () => {
     axios.get(`http://localhost:8080/api/v1/hotels?city=${city}`)
       .then(response => {
         const hotels = response.data;
-        console.log("Here is check in date " + checkInDate);
-        console.log("Here is check out date " + checkOutDate);
-         console.log(hotels);
+        // console.log("Here is check in date " + checkInDate);
+        // console.log("Here is check out date " + checkOutDate);
+        //  console.log(hotels);
 
         // Create an array to store hotel-room mappings
         const mappings = [];
@@ -40,7 +43,7 @@ const SearchResultsPage = () => {
             .then(response => {
               const rooms = response.data;
               // console.log("Room data for hotel", hotel.name);
-              // console.log(rooms);
+               console.log(rooms);
 
               // Map each room with its hotel name and store in the mappings array
               rooms.forEach(room => {
@@ -65,7 +68,7 @@ const SearchResultsPage = () => {
           .catch(error => console.error(error));
       })
       .catch(error => console.error(error));
-  }, [city, checkInDate]);
+  }, [city, checkInDate, checkOutDate, duration]);
 
   const handleReservedRoom = (hotelId)=>{
     console.log(hotelId);
@@ -100,13 +103,14 @@ const SearchResultsPage = () => {
         </a>
       ))}
       {isModalOpen && (
-      <div className="modal">
-        <div className="modal-content">
+      <div className="model">
+        <div className="model-content">
           <span className="close" onClick={closeModal}>
             &times;
           </span>
           {selectedRoom && (
           <div>
+            { console.log("HERERERFSSF "+ selectedRoom.hotelName) }
             <h3 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '10px' }}>{selectedRoom.hotelName}</h3>
             <p style={{ fontSize: '16px', fontWeight: 'bold' }}>{selectedRoom.room.title}</p>
             <p style={{ fontSize: '14px', fontStyle: 'italic', marginBottom: '5px' }}>Check In Date: {new Date(checkInDate).toLocaleDateString('en-GB')}</p>
