@@ -80,7 +80,7 @@ const RegisterForm = ()=> {
       <div className="nav">
           <nav>
             <div className="logo">
-              Logo
+              {/* Logo */}
             </div>
             <div className="nav-items">
               <button type='submit' onClick={LoginForm}>

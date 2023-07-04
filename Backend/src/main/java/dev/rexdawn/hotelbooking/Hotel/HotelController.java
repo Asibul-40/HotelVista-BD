@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/hotels")
-@CrossOrigin(origins = "*")
+@CrossOrigin("http://localhost:3000")
 public class HotelController {
     @Autowired
     private HotelService hotelService;
@@ -26,6 +26,7 @@ public class HotelController {
 //    ------------------------------------- HOTEL MODULE --------------------------------------------------
 
     @GetMapping("/all")
+//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<List<Hotel>> GetAllHotels(){
         return ResponseEntity.ok(hotelService.allHotel());
     }
@@ -48,6 +49,7 @@ public class HotelController {
             }
     }
     @GetMapping("/query")
+//    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<List<Room>> getRoomsFromHotel(
             @RequestParam String hotelId, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date)
     {

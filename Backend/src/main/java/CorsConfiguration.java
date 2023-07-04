@@ -11,7 +11,8 @@ public class CorsConfiguration implements WebMvcConfigurer {
         registry.addMapping("/api/**")
                 .allowedOrigins("http://localhost:3000")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*");
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
 
     @Bean
@@ -22,7 +23,8 @@ public class CorsConfiguration implements WebMvcConfigurer {
                 registry.addMapping("/**")
                         .allowedMethods("OPTIONS")
                         .allowedHeaders("*")
-                        .allowedOrigins("http://localhost:3000");
+                        .allowedOrigins("http://localhost:3000")
+                        .allowCredentials(true);
             }
         };
     }

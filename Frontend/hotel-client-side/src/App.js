@@ -4,6 +4,7 @@ import SearchResultsPage from './components/SearchResultsApi';
 import Login from './components/loginForm';
 import Register from './components/registerForm';
 import Home from './pages/home'
+import AllHotels from './pages/allHotels';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
     <div className="App">
        <Routes>
           <Route exact path="/" element={<Home/>} />
+          <Route path="/allHotel" element={ <AllHotels/> } />
           <Route path='/login' element={<Login/>} />
           <Route path='/register' element={<Register/>} />
           <Route path="/search-results/:city/:date" element={<SearchResultsPage/>} />

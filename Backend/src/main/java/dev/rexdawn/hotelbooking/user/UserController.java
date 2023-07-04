@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
+@CrossOrigin("http://localhost:3000")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -18,6 +19,12 @@ public class UserController {
     {
         return new ResponseEntity<List<User>>(userService.getAllUsers(), HttpStatus.OK);
     }
+
+    @GetMapping("/{username}")
+    public ResponseEntity<User> GetUserByUsername(@PathVariable String username){
+       return ResponseEntity.ok(userService.getUserByUsername(username));
+    }
+
     @PostMapping("/add")
     public ResponseEntity<String> addUser(@RequestBody User user)
     {

@@ -33,15 +33,12 @@ const LoginForm = ()=> {
     }));
   }
 
-  const HandleLoginDetails = (e =>{
+  const HandleLoginDetails = (e) =>{
     e.preventDefault();
 
-    // console.log(user);
     const url = 'http://localhost:8080/api/v1/auth/login';
     axios.post(url, user)
       .then(res=>{
-        // console.log(res.data);
-
         const {token, username} = res.data;
         console.log(username, token);
         if(!username) {
@@ -52,25 +49,46 @@ const LoginForm = ()=> {
             });
         }
         else{
-          localStorage.setItem("loggedIn", true);
+          const url = `http://localhost:8080/api/v1/users/${username}`;
+          axios.get(url)
+              .then(response => {
+                var roles = [], power=[];
+                roles = response.data.roles
+                roles.map(role => {
+                  if(role==='ROLE_USER'){
+                    power.push('u');
+                  }else if(role==='ROLE_HOTEL_MANAGER'){
+                    power.push('h');
+                  }else{
+                    power.push('a');
+                  }
+                })
+                console.log(power);
+                localStorage.setItem("power", JSON.stringify(power));
+              })
+              .catch(err=>{
+                console.log(err);
+              })
           localStorage.setItem("user", JSON.stringify(user.username));
-            navigate("/");
+          localStorage.setItem("token", JSON.stringify(token));
+          localStorage.setItem("loggedIn", JSON.stringify(true));
+          navigate("/");
         }
         
       }).catch(err=>{
         console.log(err);
       })
 
-  })
+  }
 
   return (
     <div className="">
       
       <div className="nav">
           <nav>
-            <div className="logo">
-              Logo
-            </div>
+            <NavLink className="home" to="/">
+              Home
+            </NavLink>
             <div className="nav-items">
               <button type='submit' onClick={LoginForm}>
                 Login
@@ -116,7 +134,7 @@ const LoginForm = ()=> {
 
              
 
-              <div style={{paddingTop: '3em'}}>
+              <div className='' style={{paddingTop: '3em'}}>
                 <p className="mb-0">Don't have an account? 
                   <NavLink className="signup-Btn" to={"/register"} style={{textDecoration:'none', paddingLeft:'5px', paddingRight:'4px' ,color: 'yellow', fontSize:'17px'}}>
                     Register
