@@ -1,43 +1,107 @@
 .hotel-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  
-  .hotel-card {
-    margin: 10px; 
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    width: 400px; 
-  height: 150px;
-  }
-  .hotel-info {
-    flex-grow: 1;
-  }
-  .hotel-info p {
-    margin: 0; /* Reset the default margin for paragraphs */
-  }
-  
-  .hotel-image {
-    width:180px;
-    height: 170px;
-    object-fit: contain;
-    border-radius: 2px;
-    margin-right: 3px;
-  }
-  
-  .hotel-name {
-    font-size: 18px;
-    font-weight: bold;
-  }
-  
-  .room-title {
-    font-weight: bold;
-  }
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 
-  
-  /* Add more custom styles as needed */
-  
+.hotel-card {
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  display: flex;
+  width: 400px;
+  height: 150px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.hotel-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.hotel-info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
+  margin-left: 10px;
+  text-decoration: none;
+}
+
+.hotel-info p {
+  margin: 0;
+  color: black;
+  text-decoration: none;
+}
+
+.hotel-image {
+  width: 180px;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 2px;
+  margin-right: 10px;
+}
+
+.hotel-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
+.hotel-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: black;
+}
+
+.room-title {
+  font-weight: bold;
+  color: black;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: auto;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  padding: 20px;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  color: #555;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: #000;
+}
+
+button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+

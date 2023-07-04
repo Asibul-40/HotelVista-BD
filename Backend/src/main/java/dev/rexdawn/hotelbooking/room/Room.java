@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
 @NoArgsConstructor
 public class Room {
     @Id
-    private ObjectId id;
+    private String id;
     private String roomId;
     private String title;
     private Number price;

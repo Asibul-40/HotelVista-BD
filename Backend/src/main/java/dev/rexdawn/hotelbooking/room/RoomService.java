@@ -22,7 +22,7 @@ public class RoomService {
         return roomRepository.findAll();
     }
 
-    public List<Room> getAllAvailableRooms(List<ObjectId> allRoomid) {
+    public List<Room> getAllAvailableRooms(List<String> allRoomid) {
         // Use the `in` operator to find rooms with matching IDs
         Criteria criteria = Criteria.where("_id").in(allRoomid);
 

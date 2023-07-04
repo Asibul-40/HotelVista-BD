@@ -44,11 +44,11 @@ public class HotelController {
     }
     @GetMapping("/query")
     public ResponseEntity<List<Room>> getRoomsFromHotel(
-            @RequestParam String hotelId, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date)
+            @RequestParam String hotelId, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date checkInDate,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date checkOutDate)
     {
-          //Extract All rooms by hotel Id
-//        System.out.println(hotelId+" I am here!");
-         List<Room> roomList=hotelService.getRoomList(hotelId,date);
+         System.out.println(hotelId+" I am here!");
+         List<Room> roomList=hotelService.getRoomList(hotelId,checkInDate,checkOutDate);
          return new ResponseEntity<>(roomList,HttpStatus.OK);
     }
 //    @GetMapping("/cityquery/{city}")

@@ -33,12 +33,13 @@ public class BookingController {
         bookingService.addNewBooking(booking);
         return ResponseEntity.ok("New Booking Added Successfully!");
     }
-    @GetMapping("/search/{city}/{date}")
+    @GetMapping("/search/{city}/{checkInDate}/{checkOutDate}")
     public ResponseEntity<List<Room>> findAvailableRooms(
             @PathVariable String city,
-            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date)
+            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date checkInDate,
+            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date checkOutdate)
     {
-        List<ObjectId> allRoomId=bookingService.findAvailableRoomsOnCheckInDate(date);
+        List<String> allRoomId=bookingService.findAvailableRoomsOnDate(checkInDate,checkOutdate);
 
         return new ResponseEntity<List<Room>>(roomService.getAllAvailableRooms(allRoomId),HttpStatus.OK);
     }

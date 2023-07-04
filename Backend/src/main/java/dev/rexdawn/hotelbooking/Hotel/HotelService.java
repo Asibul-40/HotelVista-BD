@@ -150,13 +150,16 @@ public class HotelService {
     }
 
     //Extract All Rooms of a Hotel by Id
-    public List<Room> getRoomList(String hotelId, Date checkInDate)
+    public List<Room> getRoomList(String hotelId, Date checkInDate,Date checkOutDate)
     {
        Optional<Hotel> hotel=hotelRepository.findById(hotelId);
        List<Room> rooms= hotel.get().getRooms();
        List<Booking> bookings=bookingService.allBookings();
-        List<ObjectId> unavailableRoomIds = bookings.stream()
-                .filter(booking -> checkInDate.after(booking.getCheckInDate()) && checkInDate.before(booking.getCheckOutDate()))
+        List<String> unavailableRoomIds = bookings.stream()
+                .filter(booking -> (checkInDate.after(booking.getCheckInDate()) && checkInDate.before(booking.getCheckOutDate()))
+                        ||(checkOutDate.after(booking.getCheckInDate()) && checkOutDate.before(booking.getCheckOutDate()))
+                        ||(booking.getCheckInDate().after(checkInDate) && booking.getCheckInDate().before(checkOutDate))
+                        ||(booking.getCheckOutDate().after(checkInDate) && booking.getCheckOutDate().before(checkOutDate)))
                 .map(Booking::getRoomId)
                 .collect(Collectors.toList());
 

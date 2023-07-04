@@ -16,7 +16,7 @@ import java.util.Date;
 public class Booking {
     @Id
     private ObjectId id;
-    private ObjectId roomId;
+    private String roomId;
     private Date checkInDate;
     private Date checkOutDate;
 }
